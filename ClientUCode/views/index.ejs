@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-Security-Policy" content="
+    default-src 'self';
+    script-src 'self' 'unsafe-inline' https://telegram.org *.telegram.org *.cloudflare.com *.cloudflareinsights.com;
+    style-src 'self' 'unsafe-inline';
+    img-src 'self' data: https://t.me *.t.me *.telegram.org *.cdn-telegram.org cdn-telegram.org;
+    connect-src 'self' https://telegram.org wss://telegram.org;
+    frame-src 'self' https://telegram.org *.telegram.org;
+    object-src 'none';
+">
+    <title>UCode</title>
+    <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+    <div class="welcome-section">
+        <span class="welcome-label">Добро пожаловать:</span>
+        <span id="welcomeName" class="welcome-name">Загрузка...</span>
+    </div>
+    <p id="userBalance">Загрузка баланса...</p>
+    <form id="activateForm">
+        <label for="code">Введите UCode:</label>
+        <input type="text" id="code" name="code" required>
+        <button type="submit">Активировать</button>
+    </form>
+    <h1>Топ-10 пользователей</h1>
+    <ul id="leaderboard">
+        <% if (topUsers && topUsers.length) { %>
+            <% topUsers.forEach(user => { %>
+                <li>
+                    <span class="rank">#<%= user.rank %></span>
+                    <img src="<%= user.photoURL %>" alt="<%= user.firstName %>">
+                    <div class="user-info">
+                        <div class="user-name"><%= user.firstName %></div>
+                        <div class="user-score"><%= user.totalAmount %> баллов</div>
+                    </div>
+                </li>
+            <% }) %>
+        <% } else { %>
+            <li>Список пуст.</li>
+        <% } %>
+    </ul>
+    <script src="https://telegram.org/js/telegram-web-app.js" type="text/javascript"></script>        
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+    if (typeof Telegram !== 'undefined' && Telegram.WebApp) {
+        const telegram = Telegram.WebApp;
+
+        // Проверяем данные пользователя
+        const user = telegram.initDataUnsafe.user;
+
+        if (!user) {
+            window.location.href = '/error';
+        } else {
+            document.getElementById('welcomeName').innerText = user.first_name;
+            // Отправляем запрос на идентификацию
+            fetch('/identify', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json; charset=utf-8' // Явно указываем кодировку
+                },
+                body: JSON.stringify({
+                    telegramId: telegram.initDataUnsafe.user
+                })
+            })
+            .then(async response => {
+                const responseText = await response.text();
+                
+                if (!response.ok) {
+                    throw new Error("HTTP error! Status: " + response.status - responseText);
+                }
+
+                return JSON.parse(responseText);
+            })
+            .then(data => {
+                document.getElementById('userBalance').innerText = "Ваш текущий баланс: " + data.totalAmount;
+            })
+            .catch(err => {
+                console.error('Ошибка:', err);
+            });
+
+            // Обработка формы для активации UCode
+            document.getElementById('activateForm').addEventListener('submit', async (event) => {
+                event.preventDefault();
+
+                const code = document.getElementById('code').value;
+                
+                try {
+                    const response = await fetch('/activate', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ code, telegramId: user.id }),
+                    });
+
+                    const result = await response.json();
+                    
+                    if (response.ok) {
+                        alert('UCode успешно активирован: ' + JSON.stringify(result));
+                        location.reload();
+                    } else {
+                        alert('Ошибка активации: ' + JSON.stringify(result));
+                    }
+                } catch (error) {
+                    alert('Ошибка при активации: ' + error.message);
+                }
+            });
+        }
+    } else {
+        console.error("Telegram WebApp SDK не инициализирован.");
+    }
+});
+    </script>
+    <script defer src="https://static.cloudflareinsights.com/beacon.min.js" integrity="sha512-ZpsOmlRQV6y907TI0dKBHq9Md29nnaEIPlkf84rnaERnq6zvWvPUqr2ft8M1aS28oN72PdrCzSjY4U6VaAw1EQ==" crossorigin="anonymous"></script>
+</body>
+</html>

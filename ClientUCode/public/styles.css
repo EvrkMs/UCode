@@ -1,0 +1,134 @@
+body {
+    margin: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #121212;
+    color: #e0e0e0;
+}
+
+p {
+    color: #f06292;
+    text-align: center;
+}
+
+h1, h2 {
+    color: #f06292;
+}
+
+.welcome-section {
+    text-align: center;
+    padding: 20px;
+    color: #f06292;
+    background-color: #1e1e1e;
+    margin-bottom: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+.welcome-name {
+    font-size: 1.5em;
+    font-weight: bold;
+    white-space: nowrap; /* Убираем перенос строк */
+    overflow: hidden; /* Скрываем лишний текст */
+    text-overflow: ellipsis; /* Добавляем многоточие */
+    display: inline-block; /* Делаем текст одной линией */
+    max-width: 80%; /* Ограничиваем ширину текста для адаптивности */
+    vertical-align: middle; /* Центрируем текст вертикально */
+}
+
+.welcome-label {
+    font-size: 1.2em;
+    margin-right: 10px;
+    vertical-align: middle;
+    color: #bb86fc;
+}
+
+input, button {
+    margin-top: 10px;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+}
+
+input {
+    width: calc(100% - 20px); /* Учитываем padding формы */
+    padding: 10px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    background-color: #292929;
+    color: #ffffff;
+    border: none;
+    border-radius: 5px;
+    box-sizing: border-box;
+}
+
+button {
+    background-color: #f06292;
+    color: #ffffff;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+button:hover {
+    background-color: #bb86fc;
+}
+
+form {
+    margin: 20px;
+    padding: 20px;
+    background-color: #1e1e1e;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+ul {
+    list-style: none;
+    padding: 0;
+    margin: 0 auto;
+    max-width: 90%; /* Ограничиваем максимальную ширину списка */
+}
+
+li {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+    padding: 10px;
+    border-radius: 8px;
+    background-color: #1e1e1e;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+}
+
+img {
+    width: 10%;
+    max-width: 50px;
+    height: auto;
+    border-radius: 50%;
+    margin-right: 10px;
+}
+
+.user-info {
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    flex-grow: 1;
+}
+
+.user-name {
+    font-weight: bold;
+    color: #f06292;
+    white-space: nowrap; /* Убираем перенос строк */
+    overflow: hidden; /* Скрываем лишний текст */
+    text-overflow: ellipsis; /* Добавляем многоточие */
+    max-width: 90%; /* Сокращаем текст в зависимости от ширины устройства */
+}
+
+.user-score {
+    color: #bb86fc;
+}
+
+.rank {
+    font-size: 1.2em;
+    font-weight: bold;
+    color: #f06292;
+    margin-right: 10px;
+}
